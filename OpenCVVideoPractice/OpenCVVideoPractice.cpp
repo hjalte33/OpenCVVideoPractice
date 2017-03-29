@@ -36,12 +36,17 @@ int main(int argc, char** argv[])
 		cvtColor(frame, frame, CV_RGB2GRAY, 1);
 
 		absdiff(frame, prevFrame, diff);
-		threshold(diff, binary, 30, 255, THRESH_BINARY);
+		threshold(diff, binary, 40, 255, THRESH_BINARY);
 
 		imshow("Frame", frame);
 		imshow("Threshold", binary);
 
-		swap(frame, prevFrame);
+		int offset = 10;
+		video.set(CV_CAP_PROP_POS_FRAMES, video.get(CV_CAP_PROP_POS_FRAMES) - offset);
+		
+		video >> prevFrame;
+		cvtColor(prevFrame, prevFrame, CV_RGB2GRAY, 1);
+		video.set(CV_CAP_PROP_POS_FRAMES, video.get(CV_CAP_PROP_POS_FRAMES) + offset - 1);
 		
 		char key = cvWaitKey(10);
 		if (key == 27) // ESC
